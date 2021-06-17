@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"
+    />
+    <title>Tasty Treats - Inquiries</title>
+  </head>
+  <body>
+    <div class="container is-max-desktop mt-6">
+      <p class="is-size-4 has-text-weight-bold mb-5">Inquiries</p>
+      <div id="cards"></div>
+    </div>
+    <script>
+      const container = document.getElementById('cards');
+
+      fetch('/inquiry')
+        .then((res) => res.json())
+        .then((data) => {
+          for (const item of data) {
+            createCard(item);
+          }
+        });
+
+      function createCard(item) {
+        const card = document.createElement('div');
+        card.classList = 'card mb-3';
+        card.innerHTML =
+          '<div class="card-content"><div class="content"></div></div>';
+        const content = card.querySelector('.content');
+
+        for (const key in item) {
+          const el = document.createElement('p');
+          const value =
+            typeof item[key] === 'boolean'
+              ? item[key]
+                ? 'Yes'
+                : 'No'
+              : item[key];
+          el.innerHTML = `<span class="has-text-weight-bold is-capitalized">${key}: </span>${value}`;
+          content.appendChild(el);
+        }
+
+        container.appendChild(card);
+      }
+    </script>
+  </body>
+</html>
